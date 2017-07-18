@@ -1,70 +1,77 @@
 import ext from "./utils/ext";
 import storage from "./utils/storage";
 
+var template = (workers) => {
+  var template = '<div class="site-description">';
+  var totalWorkers = workers.length;
 
+  template += `<h3>Total workers: ${totalWorkers}</h3>`;
+  for(var i=0; i <= totalWorkers; i++) {
+    var worker = workers[i];
+    if(worker) {
+      var hashRateObject = worker[1];
+      var hashRate = hashRateObject.a || 0;
+      var hashRateReject = hashRateObject.rd || 0;
 
-var popup = document.getElementById("app");
-storage.get('color', function(resp) {
-  var color = resp.color;
-  if(color) {
-    popup.style.backgroundColor = color
+      template += `<h5>Name: ${worker[0]}</h5>`;
+      template += `<p>Hashrate: ${hashRate}</p>`;
+      template += `<p>Reject: ${hashRateReject}</p>`;
+    }
   }
-});
+  template += '</div>';
+  return template;
+};
 
-var template = (data) => {
-  var json = JSON.stringify(data);
-  return (`
-  <div class="site-description">
-    <h3 class="title">${data.title}</h3>
-    <p class="description">${data.description}</p>
-    <a href="${data.url}" target="_blank" class="url">${data.url}</a>
-  </div>
-  <div class="action-container">
-    <button data-bookmark='${json}' id="save-btn" class="btn btn-primary">Save</button>
-  </div>
-  `);
-}
-var renderMessage = (message) => {
+var renderInformation = (data) => {
   var displayContainer = document.getElementById("display-container");
-  displayContainer.innerHTML = `<p class='message'>${message}</p>`;
-}
-
-var renderBookmark = (data) => {
-  var displayContainer = document.getElementById("display-container")
   if(data) {
     var tmpl = template(data);
+    console.log(tmpl);
     displayContainer.innerHTML = tmpl;
   } else {
     renderMessage("Sorry, could not extract this page's title and URL")
   }
-}
+};
 
-ext.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  var activeTab = tabs[0];
-  chrome.tabs.sendMessage(activeTab.id, { action: 'process-page' }, renderBookmark);
-});
+var renderMessage = (message) => {
+  var displayContainer = document.getElementById("display-container");
+  displayContainer.innerHTML = `<p class='message'>${message}</p>`;
+};
 
-popup.addEventListener("click", function(e) {
-  if(e.target && e.target.matches("#save-btn")) {
-    e.preventDefault();
-    var data = e.target.getAttribute("data-bookmark");
-    ext.runtime.sendMessage({ action: "perform-save", data: data }, function(response) {
-      if(response && response.action === "saved") {
-        renderMessage("Your bookmark was saved successfully!");
-      } else {
-        renderMessage("Sorry, there was an error while saving your bookmark.");
-      }
-    })
+storage.get('data', function(resp) {
+  if(!resp.data) {
+    var message = "Please add your wallet address in Option";
+    renderMessage(message);
+    return;
   }
+
+  var wallet_value = resp.data.wallet;
+  var value_algorithm = resp.data.algorithm;
+
+  var requestUrl = `https://api.nicehash.com/api?method=stats.provider.workers&addr=${wallet_value}&algo=${value_algorithm}`;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', requestUrl);
+  xhr.send(null);
+
+  xhr.onreadystatechange = function () {
+      var DONE = 4;
+      var OK = 200;
+      if (xhr.readyState === DONE) {
+        if (xhr.status === OK) {
+          var responseText = JSON.parse(xhr.responseText);
+          if(responseText.result) {
+            var workers = responseText.result.workers || [];
+            renderInformation(workers);
+          }
+        }
+      } else {
+        console.log('Error: ' + xhr.status);
+      }
+  };
 });
 
 var optionsLink = document.querySelector(".js-options");
 optionsLink.addEventListener("click", function(e) {
   e.preventDefault();
   ext.tabs.create({'url': ext.extension.getURL('options.html')});
-});
-
-
-chrome.browserAction.onClicked.addListener(function(tab) {
-  alert('tien');
 });

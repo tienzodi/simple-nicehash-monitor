@@ -6,19 +6,18 @@ var algorithm = document.getElementById('algorithm');
 var button = document.getElementById('saveInformation');
 
 button.addEventListener('click', function() {
-  storage.set({ wallet: wallet.value, algorithm: algorithm.value });
+  var data = { wallet: wallet.value, algorithm: algorithm.value };
+  storage.set({ data: data });
 }, false);
 
-storage.get('wallet', function(resp) {
-  var value = resp.wallet;
-  if(value) {
-    wallet.value = value;
+storage.get('data', function(resp) {
+  var wallet_value = resp.data.wallet;
+  if(wallet_value) {
+    wallet.value = wallet_value;
   }
-});
 
-storage.get('algorithm', function(resp) {
-  var value = resp.algorithm;
-  if(value) {
-    algorithm.value = value;
+  var value_algorithm = resp.data.algorithm;
+  if(value_algorithm) {
+    algorithm.value = value_algorithm;
   }
 });
