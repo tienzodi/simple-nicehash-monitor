@@ -13,9 +13,9 @@ var template = (workers) => {
       var hashRate = hashRateObject.a || 0;
       var hashRateReject = hashRateObject.rd || 0;
 
-      template += `<h5>Name: ${worker[0]}</h5>`;
-      template += `<p>Hashrate: ${hashRate}</p>`;
-      template += `<p>Reject: ${hashRateReject}</p>`;
+      template += `<div class="worker-wrapper"><h5 class="worker-name">Name: ${worker[0]}</h5>`;
+      template += `<p class="worker-accepted-rate">Accepted speed: ${hashRate} MH/s</p>`;
+      template += `<p class="worker-rejected-rate">Rejected speed: ${hashRateReject} MH/s</p></div>`;
     }
   }
   template += '</div>';
