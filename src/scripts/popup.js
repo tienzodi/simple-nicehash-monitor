@@ -29,7 +29,7 @@ var renderInformation = (data) => {
     console.log(tmpl);
     displayContainer.innerHTML = tmpl;
   } else {
-    renderMessage("Sorry, could not extract this page's title and URL")
+    renderMessage("Sorry, could not get your workers information")
   }
 };
 
