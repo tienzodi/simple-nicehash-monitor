@@ -22,11 +22,10 @@ var template = (workers) => {
   return template;
 };
 
-var renderInformation = (data) => {
+var renderInformation = (data, id) => {
   var displayContainer = document.getElementById("display-container");
   if(data) {
     var tmpl = template(data);
-    console.log(tmpl);
     displayContainer.innerHTML = tmpl;
   } else {
     renderMessage("Sorry, could not get your workers information")
@@ -48,27 +47,57 @@ storage.get('data', function(resp) {
   var wallet_value = resp.data.wallet;
   var value_algorithm = resp.data.algorithm;
 
-  var requestUrl = `https://api.nicehash.com/api?method=stats.provider.workers&addr=${wallet_value}&algo=${value_algorithm}`;
+  getWorkers(wallet_value, value_algorithm);
+  getBalance(wallet_value);
+});
+
+var getWorkers = function (address, algorithm) {
+  var requestUrl = `https://api.nicehash.com/api?method=stats.provider.workers&addr=${address}&algo=${algorithm}`;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', requestUrl);
   xhr.send(null);
 
   xhr.onreadystatechange = function () {
-      var DONE = 4;
-      var OK = 200;
-      if (xhr.readyState === DONE) {
-        if (xhr.status === OK) {
-          var responseText = JSON.parse(xhr.responseText);
-          if(responseText.result) {
-            var workers = responseText.result.workers || [];
-            renderInformation(workers);
-          }
+    var DONE = 4;
+    var OK = 200;
+    if (xhr.readyState === DONE) {
+      if (xhr.status === OK) {
+        var responseText = JSON.parse(xhr.responseText);
+        if(responseText.result) {
+          var workers = responseText.result.workers || [];
+          renderInformation(workers);
         }
-      } else {
-        console.log('Error: ' + xhr.status);
       }
+    } else {
+      console.log('Error: ' + xhr.status);
+    }
   };
-});
+};
+
+var getBalance = function (address) {
+  var requestUrl = `https://api.nicehash.com/api?method=stats.provider&addr=${address}`;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', requestUrl);
+  xhr.send(null);
+
+  xhr.onreadystatechange = function () {
+    var DONE = 4;
+    var OK = 200;
+    if (xhr.readyState === DONE) {
+      if (xhr.status === OK) {
+        var responseText = JSON.parse(xhr.responseText);
+        if(responseText.result) {
+          var displayContainer = document.getElementById("display-balance");
+            var stats = responseText.result.stats[0];
+            var temlplate = `<h5>Balance: ${stats.balance}</h5>`;
+            displayContainer.innerHTML = temlplate;
+        }
+      }
+    } else {
+      console.log('Error: ' + xhr.status);
+    }
+  };
+};
 
 var optionsLink = document.querySelector(".js-options");
 optionsLink.addEventListener("click", function(e) {
