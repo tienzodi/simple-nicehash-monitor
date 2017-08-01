@@ -121,8 +121,8 @@ var getBalance = function (address) {
             var value_algorithm =  algor.algo;
             var nameAlgor =  algor.name;
             var unpaid = algor.data[1];
-            var totalSpeed = algor.data[0].a;
-            var profitability = algor.profitability;
+            var totalSpeed = algor.data[0].a  || 0;
+            var profitability = algor.profitability  || 0;
             var profitEstimate = algor.profitability * totalSpeed;
             profitEstimate = profitEstimate.toFixed(8);
 
