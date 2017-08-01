@@ -113,7 +113,8 @@ var getBalance = function (address) {
     if (xhr.readyState === DONE) {
       if (xhr.status === OK) {
         var responseText = JSON.parse(xhr.responseText);
-        if(responseText.result) {
+        if(responseText.result && responseText.result.error == null) {
+          console.log(responseText.result);
           var totalAlgors = responseText.result.current;
           var template = '';
           for(var i=0; i < totalAlgors.length; i++) {
@@ -142,6 +143,14 @@ var getBalance = function (address) {
             var value_algorithm =  algor.algo;
             getWorkers(address, value_algorithm);
           }
+        } else {
+          console.log(responseText.result);
+          var displayContainer = document.getElementById("display-balance");
+          displayContainer.innerHTML = 'Please wait ...';
+
+          setTimeout(function(){
+            getBalance(address);
+          }, 3000);
         }
       }
     } else {
