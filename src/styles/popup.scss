@@ -80,13 +80,20 @@ footer {
     }
   }
 }
-
-#display-balance {
-  text-align: center;
+#display-total-balance {
   display: block;
-  margin: 10px;
-  font-size: 18px;
+  margin: 10px 0;
+  text-align: center;
   color: rgba(255, 0, 0, 0.67);
+}
+#display-balance {
+  margin-bottom: 20px;
+  .algor {
+    display: block;
+    margin-bottom: 0px;
+    font-size: 14px;
+    color: rgba(255, 0, 0, 0.67);
+  }
 }
 
 .action-container {

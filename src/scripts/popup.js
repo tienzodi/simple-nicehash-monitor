@@ -10,12 +10,14 @@ var template = (workers) => {
     var worker = workers[i];
     if(worker) {
       var hashRateObject = worker[1];
-      var hashRate = hashRateObject.a || 0;
-      var hashRateReject = hashRateObject.rd || 0;
+      var hashRate = hashRateObject.a * 1 || 0;
+      var hashRateReject = hashRateObject.rd * 1 || 0;
+      var hashRatePercent = hashRate / (hashRateReject + hashRate) * 100;
+      hashRatePercent = hashRatePercent.toFixed(2);
+      var timeConnected = worker[2];
 
-      template += `<div class="worker-wrapper"><h5 class="worker-name">Name: ${worker[0]}</h5>`;
-      template += `<p class="worker-accepted-rate">Accepted speed: ${hashRate} MH/s</p>`;
-      template += `<p class="worker-rejected-rate">Rejected speed: ${hashRateReject} MH/s</p></div>`;
+      template += `<div class="worker-wrapper"><h6 class="worker-name" style="margin-bottom:3px;">[${worker[0]}]</h6>`;
+      template += `<p class="worker-rate">A:${hashRate} MH/s | A%: ${hashRatePercent}% | ${timeConnected} mins</p></div>`;
     }
   }
   template += '</div>';
@@ -49,6 +51,7 @@ storage.get('data', function(resp) {
 
   getWorkers(wallet_value, value_algorithm);
   getBalance(wallet_value);
+  getTotalBalance(wallet_value);
 });
 
 var getWorkers = function (address, algorithm) {
@@ -74,7 +77,7 @@ var getWorkers = function (address, algorithm) {
   };
 };
 
-var getBalance = function (address) {
+var getTotalBalance = function (address) {
   var requestUrl = `https://api.nicehash.com/api?method=stats.provider&addr=${address}`;
   var xhr = new XMLHttpRequest();
   xhr.open('GET', requestUrl);
@@ -87,10 +90,52 @@ var getBalance = function (address) {
       if (xhr.status === OK) {
         var responseText = JSON.parse(xhr.responseText);
         if(responseText.result) {
-          var displayContainer = document.getElementById("display-balance");
+          var displayContainer = document.getElementById("display-total-balance");
             var stats = responseText.result.stats[0];
             var temlplate = `<h5>Balance: ${stats.balance}</h5>`;
             displayContainer.innerHTML = temlplate;
+        }
+      }
+    } else {
+      console.log('Error: ' + xhr.status);
+    }
+  };
+};
+
+var getBalance = function (address) {
+  var requestUrl = `https://api.nicehash.com/api?method=stats.provider.ex&addr=${address}`;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', requestUrl);
+  xhr.send(null);
+
+  xhr.onreadystatechange = function () {
+    var DONE = 4;
+    var OK = 200;
+    if (xhr.readyState === DONE) {
+      if (xhr.status === OK) {
+        var responseText = JSON.parse(xhr.responseText);
+        if(responseText.result) {
+          var totalAlgors = responseText.result.current;
+          var template = '';
+          for(var i=0; i < totalAlgors.length; i++) {
+            var algor = totalAlgors[i];
+            var nameAlgor =  algor.name;
+            var unpaid = algor.data[1];
+            var totalSpeed = algor.data[0].a;
+            var profitability = algor.profitability;
+            var profitEstimate = algor.profitability * totalSpeed;
+            profitEstimate = profitEstimate.toFixed(8);
+
+            template += `<p class="algor">${nameAlgor}</p>`;
+            template += `<small>Unpaid balance: <strong>${unpaid} BTC</strong></small><br/>`;
+            template += `<small>Profit per MH: <strong>${profitability} BTC</strong></small><br/>`;
+            template += `<small>Profitability: <strong>${profitEstimate} BTC</strong></small><br/>`;
+            template += `<small>Total speed: ${totalSpeed}</small> MH/s<br/>`;
+          }
+          var displayContainer = document.getElementById("display-balance");
+          displayContainer.innerHTML = template;
+
+          console.log(responseText.result.pasts);
         }
       }
     } else {
