@@ -131,7 +131,6 @@ function buildJS(target) {
     'contentscript.js',
     'options.js',
     'popup.js',
-    'coin.js',
     'livereload.js'
   ]
 
