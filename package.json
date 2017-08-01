@@ -1,5 +1,5 @@
 {
-  "name": "extension-boilerplate",
+  "name": "simple-nicehash-monitor",
   "version": "0.0.2",
   "description": "A template for creating cross-browser extensions",
   "scripts": {
@@ -17,13 +17,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/EmailThis/extension-boilerplate"
+    "url": "https://github.com/tienzodi/simple-nicehash-monitor"
   },
-  "author": "Bharani <bharani91@gmail.com> (https://github.com/bharani91)",
+  "author": "Zodinet <info@zodinet.com>",
   "bugs": {
-    "url": "https://github.com/EmailThis/extension-boilerplate/issues"
+    "url": "https://github.com/tienzodi/simple-nicehash-monitor/issues"
   },
-  "homepage": "https://www.emailthis.me/extension-boilerplate",
+  "homepage": "https://zodinet.com",
   "devDependencies": {
     "babel-core": "^6.1.2",
     "babel-preset-es2015": "^6.1.2",
