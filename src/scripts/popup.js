@@ -114,7 +114,6 @@ var getBalance = function (address) {
       if (xhr.status === OK) {
         var responseText = JSON.parse(xhr.responseText);
         if(responseText.result && responseText.result.error == null) {
-          console.log(responseText.result);
           var totalAlgors = responseText.result.current;
           var template = '';
           for(var i=0; i < totalAlgors.length; i++) {
@@ -144,7 +143,6 @@ var getBalance = function (address) {
             getWorkers(address, value_algorithm);
           }
         } else {
-          console.log(responseText.result);
           var displayContainer = document.getElementById("display-balance");
           displayContainer.innerHTML = 'Please wait ...';
 
