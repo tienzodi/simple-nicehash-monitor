@@ -41,6 +41,7 @@
 .option {
   margin: 1em auto;
   h5 {
+    font-weight: bold;
     margin-bottom: 1em;
   }
 
@@ -53,6 +54,11 @@
       margin: 3px 5px;
     }
   }
+}
+
+select {
+  border-radius: 5px;
+  padding: 10px;
 }
 
 

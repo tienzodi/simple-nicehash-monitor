@@ -31,6 +31,10 @@ footer {
   max-width: 350px;
 }
 
+* {
+  user-select: inherit!important;
+}
+
 .app-name {
   font-size: 14px;
   text-transform: uppercase;
@@ -49,7 +53,7 @@ footer {
     padding: 0;
     border-bottom: 1px solid $gray;
     padding-bottom: 0.5em;
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .description {
@@ -112,4 +116,9 @@ footer {
   border-radius: 2px;
   outline: none;
   font-size: 1em;
+}
+
+.worker {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

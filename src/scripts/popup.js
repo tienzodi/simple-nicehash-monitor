@@ -5,7 +5,7 @@ var template = (workers) => {
   var template = '<div class="site-description">';
   var totalWorkers = workers.length;
 
-  template += `<h3>Total workers: ${totalWorkers}</h3>`;
+  template += `<h3>Total workers: <strong>${totalWorkers}</strong></h3>`;
   for(var i=0; i <= totalWorkers; i++) {
     var worker = workers[i];
     if(worker) {
@@ -17,15 +17,15 @@ var template = (workers) => {
       var timeConnected = worker[2];
 
       template += `<div class="worker-wrapper"><h6 class="worker-name" style="margin-bottom:3px;">[${worker[0]}]</h6>`;
-      template += `<p class="worker-rate">A:${hashRate} MH/s | A%: ${hashRatePercent}% | ${timeConnected} mins</p></div>`;
+      template += `<p class="worker-rate">A:<strong>${hashRate} MH/s</strong> | A%: <strong>${hashRatePercent}%</strong> | <strong>${timeConnected} mins</strong></p></div>`;
     }
   }
   template += '</div>';
   return template;
 };
 
-var renderInformation = (data, id) => {
-  var displayContainer = document.getElementById("display-container");
+var renderInformation = (data, algorithm) => {
+  var displayContainer = document.getElementById("worker-" + algorithm);
   if(data) {
     var tmpl = template(data);
     displayContainer.innerHTML = tmpl;
@@ -49,7 +49,6 @@ storage.get('data', function(resp) {
   var wallet_value = resp.data.wallet;
   var value_algorithm = resp.data.algorithm;
 
-  getWorkers(wallet_value, value_algorithm);
   getBalance(wallet_value);
   getTotalBalance(wallet_value);
 });
@@ -68,7 +67,7 @@ var getWorkers = function (address, algorithm) {
         var responseText = JSON.parse(xhr.responseText);
         if(responseText.result) {
           var workers = responseText.result.workers || [];
-          renderInformation(workers);
+          renderInformation(workers, algorithm);
         }
       }
     } else {
@@ -90,7 +89,7 @@ var getTotalBalance = function (address) {
       if (xhr.status === OK) {
         var responseText = JSON.parse(xhr.responseText);
         if(responseText.result) {
-          var displayContainer = document.getElementById("display-total-balance");
+            var displayContainer = document.getElementById("display-total-balance");
             var stats = responseText.result.stats[0];
             var temlplate = `<h5>Balance: ${stats.balance}</h5>`;
             displayContainer.innerHTML = temlplate;
@@ -119,6 +118,7 @@ var getBalance = function (address) {
           var template = '';
           for(var i=0; i < totalAlgors.length; i++) {
             var algor = totalAlgors[i];
+            var value_algorithm =  algor.algo;
             var nameAlgor =  algor.name;
             var unpaid = algor.data[1];
             var totalSpeed = algor.data[0].a;
@@ -131,11 +131,17 @@ var getBalance = function (address) {
             template += `<small>Profit per MH: <strong>${profitability} BTC</strong></small><br/>`;
             template += `<small>Profitability: <strong>${profitEstimate} BTC</strong></small><br/>`;
             template += `<small>Total speed: ${totalSpeed}</small> MH/s<br/>`;
+            template += `<div id='worker-${value_algorithm}' class='worker'></div>`;
           }
+
           var displayContainer = document.getElementById("display-balance");
           displayContainer.innerHTML = template;
 
-          console.log(responseText.result.pasts);
+          for(var i=0; i < totalAlgors.length; i++) {
+            var algor = totalAlgors[i];
+            var value_algorithm =  algor.algo;
+            getWorkers(address, value_algorithm);
+          }
         }
       }
     } else {
