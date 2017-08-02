@@ -5,7 +5,10 @@ var template = (workers) => {
   var template = '<div class="site-description">';
   var totalWorkers = workers.length;
 
-  template += `<h3>Total workers: <strong>${totalWorkers}</strong></h3>`;
+  template += `<div class="row">`;
+  template += `<div class="col-xs-12"><div class="card green"><div class="title">Total workers: <strong>${totalWorkers}</div></div></div>`;
+  template += `</div>`;
+
   for(var i=0; i <= totalWorkers; i++) {
     var worker = workers[i];
     if(worker) {
@@ -16,8 +19,9 @@ var template = (workers) => {
       hashRatePercent = hashRatePercent.toFixed(2);
       var timeConnected = worker[2];
 
-      template += `<div class="worker-wrapper"><h6 class="worker-name" style="margin-bottom:3px;">[${worker[0]}]</h6>`;
-      template += `<p class="worker-rate">A:<strong>${hashRate} MH/s</strong> | A%: <strong>${hashRatePercent}%</strong> | <strong>${timeConnected} mins</strong></p></div>`;
+      template += `<div class="row">`;
+      template += `<div class="col-xs-12"><div class="card blue"><div class="title">${worker[0]}</div><div class="content">A:<strong>${hashRate} MH/s</strong> | A%: <strong>${hashRatePercent}%</strong> | <strong>${timeConnected} mins</strong></div></div></div>`;
+      template += `</div>`;
     }
   }
   template += '</div>';
@@ -41,7 +45,7 @@ var renderMessage = (message) => {
 
 storage.get('data', function(resp) {
   if(!resp.data) {
-    var message = "Please add your wallet address in Option";
+    var message = "Please add your wallet address in Options";
     renderMessage(message);
     return;
   }
@@ -91,8 +95,11 @@ var getTotalBalance = function (address) {
         if(responseText.result) {
             var displayContainer = document.getElementById("display-total-balance");
             var stats = responseText.result.stats[0];
-            var temlplate = `<h5>Balance: ${stats.balance}</h5>`;
-            displayContainer.innerHTML = temlplate;
+            var template = ``;
+            template += `<div class="row">`;
+            template += `<div class="col-xs-12"><div class="card green"><div class="title">Balance</div><div class="content">${stats.balance} BTC</div></div></div>`;
+            template += `</div>`;
+            displayContainer.innerHTML = template;
         }
       }
     } else {
@@ -126,11 +133,20 @@ var getBalance = function (address) {
             var profitEstimate = algor.profitability * totalSpeed;
             profitEstimate = profitEstimate.toFixed(8);
 
-            template += `<p class="algor">${nameAlgor}</p>`;
-            template += `<small>Unpaid balance: <strong>${unpaid} BTC</strong></small><br/>`;
-            template += `<small>Profit per MH: <strong>${profitability} BTC</strong></small><br/>`;
-            template += `<small>Profitability: <strong>${profitEstimate} BTC</strong></small><br/>`;
-            template += `<small>Total speed: ${totalSpeed}</small> MH/s<br/>`;
+            template += `<div class="row">`;
+            template += `<div class="col-xs-12"><div class="card red"><div class="title">Algorithm: ${nameAlgor}</div></div></div>`;
+            template += `</div>`;
+
+            template += `<div class="row">`;
+            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Unpaid balance</div><div class="content">${unpaid} BTC</div></div></div>`;
+            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Total speed</div><div class="content">${totalSpeed} MH/s</div></div></div>`;
+            template += `</div>`;
+
+            template += `<div class="row">`;
+            template += `<div class="col-xs-6"><div class="card yellow"><div class="title">Profit per MH</div><div class="content">${profitability} BTC</div></div></div>`;
+            template += `<div class="col-xs-6"><div class="card yellow"><div class="title">Profitability</div><div class="content">${profitEstimate} BTC</div></div></div>`;
+            template += `</div>`;
+            
             template += `<div id='worker-${value_algorithm}' class='worker'></div>`;
           }
 

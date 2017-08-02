@@ -1,6 +1,6 @@
 {
   "name": "Simple NiceHash Monitor",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "manifest_version": 2,
   "description": "This is tool to monitor workers of NiceHash quickly.",
   "icons": {

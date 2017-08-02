@@ -26,9 +26,9 @@ footer {
 }
 
 .popup-content {
-  min-width: 220px;
+  min-width: 400px;
   min-height: 100px;
-  max-width: 350px;
+  max-width: 400px;
 }
 
 * {
@@ -46,7 +46,6 @@ footer {
 
 .site-description {
   margin: 0;
-  width: 500px;
 
   h3 {
     margin: 0;
@@ -86,12 +85,11 @@ footer {
 }
 #display-total-balance {
   display: block;
-  margin: 10px 0;
+  margin: 10px 0 0;
   text-align: center;
   color: rgba(255, 0, 0, 0.67);
 }
 #display-balance {
-  margin-bottom: 20px;
   .algor {
     display: block;
     margin-bottom: 0px;
@@ -122,3 +120,38 @@ footer {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.card {
+  margin-bottom: 30px;
+  .title {
+    color: #ebebeb;
+    border-color: transparent;
+    text-align: center;
+    padding: 5px 8px;
+    font-weight: bold;
+  }
+  .content {
+    background-color: #4e5d6c;
+    text-align: center;
+    padding: 10px;
+    color: #fff;
+  }
+}
+
+.green {
+    background-color: #5cb85c;
+}
+
+.blue {
+    background-color: #5bc0de;
+}
+
+.yellow {
+    background-color: #f0ad4e;
+}
+
+.red {
+    background-color: #d9534f;
+}
+
+
