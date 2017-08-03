@@ -137,17 +137,18 @@ var getBalance = function (address) {
             template += `<div class="col-xs-12"><div class="card red"><div class="title">Algorithm: ${nameAlgor}</div></div></div>`;
             template += `</div>`;
 
-            template += `<div class="row">`;
-            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Unpaid balance</div><div class="content">${unpaid} BTC</div></div></div>`;
-            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Total speed</div><div class="content">${totalSpeed} MH/s</div></div></div>`;
-            template += `</div>`;
+            template += `<div id='worker-${value_algorithm}' class='worker'></div>`;
 
             template += `<div class="row">`;
             template += `<div class="col-xs-6"><div class="card yellow"><div class="title">Profit per MH</div><div class="content">${profitability} BTC</div></div></div>`;
-            template += `<div class="col-xs-6"><div class="card yellow"><div class="title">Profitability</div><div class="content">${profitEstimate} BTC</div></div></div>`;
+            template += `<div class="col-xs-6"><div class="card yellow"><div class="title">Total speed</div><div class="content">${totalSpeed} MH/s</div></div></div>`;
+            template += `</div>`;
+
+            template += `<div class="row">`;
+            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Unpaid balance</div><div class="content">${unpaid} BTC</div></div></div>`;
+            template += `<div class="col-xs-6"><div class="card blue"><div class="title">Profitability</div><div class="content">${profitEstimate} BTC</div></div></div>`;
             template += `</div>`;
             
-            template += `<div id='worker-${value_algorithm}' class='worker'></div>`;
           }
 
           var displayContainer = document.getElementById("display-balance");
