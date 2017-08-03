@@ -3,7 +3,7 @@ import storage from "./utils/storage";
 
 
 storage.get('data', function(resp) {
-	var intervalNoti = 6000;//1 * 1000 * 60;
+	var intervalNoti = 60000;//1 * 1000 * 60;
 
   	setInterval(function(){
   		if(!resp.data) {
