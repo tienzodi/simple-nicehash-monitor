@@ -1,24 +1,22 @@
 import ext from "./utils/ext";
 import storage from "./utils/storage";
 
+var intervalNoti = 60000;//1 * 1000 * 60;
 
-storage.get('data', function(resp) {
-	var intervalNoti = 6000;//1 * 1000 * 60;
-
-  	setInterval(function(){
-  		if(!resp.data) {
+setInterval(function(){
+  storage.get('data', function(resp) {
+		if(!resp.data) {
 		    return;
 		}
   		
-  		var wallet_value = resp.data.wallet;
-	  	var disable_notification = resp.data.disableNotification;
-	  	
-	  	if(wallet_value != null) {
-	  		getBalance(wallet_value);
-	  	}
-	}, intervalNoti);
-
-});
+		var wallet_value = resp.data.wallet;
+  	var disable_notification = resp.data.disableNotification;
+  	
+  	if(wallet_value != null) {
+  		getBalance(wallet_value);
+  	}
+  });
+}, intervalNoti);
 
 function notifyMe(message) {
   // Let's check if the browser supports notifications
